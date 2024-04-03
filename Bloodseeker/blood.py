@@ -374,6 +374,8 @@ while running:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			running = False
+			pygame.quit()
+			sys.exit()
 			break
 			
 		if player1.hp == 0:
@@ -425,8 +427,10 @@ while running:
 	# Escudo.
 	draw_hp_bar(screen, 5, 5, player1.hp)
 	draw_text2(screen, str(int(player1.hp)) + "/100", 10, 50, 5)
+	draw_hp_bar(screen, player1.rect.x, player1.rect.y, player1.hp)
 	draw_hp_bar(screen, 600, 5, player2.hp)
 	draw_text2(screen, str(int(player2.hp))+ "/100", 10, 650, 5)
+	draw_hp_bar(screen, player2.rect.x, player2.rect.y, player2.hp)
 	draw_mana_bar(screen, 5, 15, player1.mana)
 	draw_text2(screen, str(int(player1.mana))+ "/100", 10, 50, 15)
 	draw_mana_bar(screen, 600, 15, player2.mana)
