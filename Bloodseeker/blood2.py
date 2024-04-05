@@ -164,18 +164,16 @@ class Enemy(pygame.sprite.Sprite):
 		self.image.set_colorkey(WHITE)
 		self.rect = self.image.get_rect()
 		self.rect.centerx = WIDTH//2
-		
 		self.rect.centery = HEIGHT//2
-		self.cast = False
-		
 		self.blood = False
-		self.rangspell = 10
 		self.rangcancel = 10
 		self.counter = True
 		self.counter2 = True
+		self.a = randint(1000,5000)
+		self.b = randint(1000,5000)
     
 	def update(self):
-		self.centerx = WIDTH//2
+		pass
 		
 
 class Rupture(pygame.sprite.Sprite):
@@ -213,7 +211,6 @@ def show_go_screen():
 	draw_text1(screen, "llega a la meta", 20, WIDTH // 2, HEIGHT // 2)
 	draw_text1(screen, "Press Q", 20, WIDTH // 2, HEIGHT * 3/4)
 	#draw_text(screen, "Created by: Francisco Carvajal", 10,  60, 625)
-	
 	
 	pygame.display.flip()
 	waiting = True
@@ -277,7 +274,6 @@ game_over1 = False
 game_over2 = False
 while running:
 	if start:
-
 		show_go_screen()
 		screen.blit(background,(0,0))
 		start = False
@@ -290,8 +286,10 @@ while running:
 		borde = Borde()
 		finish = Finish()
 		all_sprites.add(enemy ,player1, player2, borde, finish)
-	if game_over1:
+		start_time1 = pygame.time.get_ticks()
+		start_time2 = pygame.time.get_ticks()
 
+	if game_over1:
 		show_game_over_screenp1()
 		screen.blit(background,(0,0))
 		game_over1 = False
@@ -304,9 +302,10 @@ while running:
 		borde = Borde()
 		finish = Finish()
 		all_sprites.add(enemy ,player1, player2, borde, finish)
+		start_time1 = pygame.time.get_ticks()
+		start_time2 = pygame.time.get_ticks()
 
 	if game_over2:
-
 		show_game_over_screenp2()
 		screen.blit(background,(0,0))
 		game_over2 = False
@@ -319,39 +318,41 @@ while running:
 		borde = Borde()
 		finish = Finish()
 		all_sprites.add(enemy ,player1, player2, borde, finish)	
+		start_time1 = pygame.time.get_ticks()
+		start_time2 = pygame.time.get_ticks()
 	
 	clock.tick(60)
 	
-	if not enemy.blood:
-			if enemy.counter2:
-				time1 = randint(200,1000)
-				time2 = randint(200,1000)
-				
-				enemy.counter2 = False
+	if enemy.counter:
+		enemy.a = randint(1000,6000)
+		enemy.b = randint(1000,6000)
+		enemy.counter = False
+		enemy.counter2 = True
 
-			if enemy.counter:
-				time1 -= randint(5,50)
-				if time1 <= 0:
-					rupture = Rupture(enemy.rect.center)
-					all_sprites.add(rupture)
-					enemy.counter = False
-			
-	print(time1)
-					
+	if enemy.counter2:
+		if not enemy.blood:
+			current_time = pygame.time.get_ticks()
+			elapsed_time = current_time - start_time1
+			if elapsed_time >= enemy.a:
+				rupture = Rupture(enemy.rect.center)
+				all_sprites.add(rupture)
+				enemy.counter2 = False
+				start_time1 = current_time
+						
 	if enemy.blood:
-		#print("blod")
+		current_time2 = pygame.time.get_ticks()
+		elapsed_time2 = current_time2 - start_time2
 		player1.image = pygame.image.load("img/player1b.png").convert()
 		player2.image = pygame.image.load("img/player2b.png").convert()
 		
-		time2 -= randint(5,50)
-		
-		if time2 <= 0:
+		if elapsed_time2 >= enemy.b:
 			player1.image = pygame.image.load("img/player1a.png").convert()
 			player2.image = pygame.image.load("img/player2a.png").convert()
 			
 			enemy.counter = True
 			enemy.blood = False
-			enemy.counter2 = True
+			start_time2 = current_time2
+			
 		
 		keystate = pygame.key.get_pressed()
 		if keystate[pygame.K_a]:
@@ -414,16 +415,11 @@ while running:
 	if pygame.sprite.collide_rect(player2, finish):
 		game_over2 = True
 
-
 	all_sprites.update()
 
 	screen.blit(background, [0, 0])
 
 	all_sprites.draw(screen)
-
-	#Marcador
-	
-	#draw_text(screen, str(player.score), 25, WIDTH // 2, 10)
 	
 	# Escudo.
 	draw_hp_bar(screen, 5, 5, player1.hp)
