@@ -356,22 +356,22 @@ while running:
 		
 		keystate = pygame.key.get_pressed()
 		if keystate[pygame.K_a]:
-			player1.hp -= 6
+			player1.hp -= 2
 		if keystate[pygame.K_w]:
-			player1.hp -= 6
+			player1.hp -= 2
 		if keystate[pygame.K_d]:
-			player1.hp -= 6
+			player1.hp -= 2
 		if keystate[pygame.K_s]:
-			player1.hp -= 6
+			player1.hp -= 2
 	
 		if keystate[pygame.K_LEFT]:
-			player2.hp -= 6
+			player2.hp -= 2
 		if keystate[pygame.K_DOWN]:
-			player2.hp -= 6
+			player2.hp -= 2
 		if keystate[pygame.K_RIGHT]:
-			player2.hp -= 6
+			player2.hp -= 2
 		if keystate[pygame.K_UP]:
-			player2.hp -= 6
+			player2.hp -= 2
 	
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
