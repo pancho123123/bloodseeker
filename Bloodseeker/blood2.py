@@ -1,7 +1,7 @@
 import pygame, random
 from random import randint
 
-WIDTH = 1200
+WIDTH = 1300
 HEIGHT = 700
 BLACK = (0, 0, 0)
 WHITE = ( 255, 255, 255)
@@ -83,8 +83,8 @@ class Player1(pygame.sprite.Sprite):
 			self.speed_y = 4
 		self.rect.y += self.speed_y
 		
-		if self.rect.right > WIDTH + self.rect.centerx +1:
-			self.rect.right = WIDTH + self.rect.centerx+ 1
+		if self.rect.right > WIDTH :
+			self.rect.right = WIDTH
 		if self.rect.left < 0:
 			self.rect.left = 0
 		if self.rect.top < 0:
@@ -129,8 +129,8 @@ class Player2(pygame.sprite.Sprite):
 			self.speed_y = 4
 		self.rect.y += self.speed_y
 		
-		if self.rect.right > WIDTH + self.rect.centerx + 1:
-			self.rect.right = WIDTH + self.rect.centerx +1
+		if self.rect.right > WIDTH :
+			self.rect.right = WIDTH
 		if self.rect.left < 0:
 			self.rect.left = 0
 		if self.rect.top < 0:
@@ -157,7 +157,6 @@ class Finish(pygame.sprite.Sprite):
 		self.rect.y = 350
 
 class Enemy(pygame.sprite.Sprite):
-	
 	def __init__(self):
 		super().__init__()
 		self.image = pygame.transform.scale(pygame.image.load("img/blood/blood0.png").convert(),(200,200))
@@ -166,7 +165,6 @@ class Enemy(pygame.sprite.Sprite):
 		self.rect.centerx = WIDTH//2
 		self.rect.centery = HEIGHT//2
 		self.blood = False
-		self.rangcancel = 10
 		self.counter = True
 		self.counter2 = True
 		self.a = randint(1000,5000)
@@ -201,7 +199,7 @@ class Rupture(pygame.sprite.Sprite):
 				self.rect.center = center
 		if self.frame == 1:
 			rupture_sound.play()
-		if self.frame == 15:
+		if self.frame == 12:
 			enemy.blood = True
 
 def show_go_screen():
@@ -264,7 +262,7 @@ for i in range(22):
 	img_scale = pygame.transform.scale(img, (200,200))
 	rupture_anim.append(img_scale)
 
-background = pygame.image.load("img/fond.png").convert()
+background = pygame.transform.scale(pygame.image.load("img/fond.png").convert(),(1300,700))
 
 rupture_sound = pygame.mixer.Sound("sound/rupture.wav")
 
@@ -277,15 +275,13 @@ while running:
 		show_go_screen()
 		screen.blit(background,(0,0))
 		start = False
-		
 		all_sprites = pygame.sprite.Group()
-		
+		borde = Borde()
 		enemy = Enemy()
 		player1 = Player1()
 		player2 = Player2()
-		borde = Borde()
 		finish = Finish()
-		all_sprites.add(enemy ,player1, player2, borde, finish)
+		all_sprites.add(borde, enemy ,player1, player2, finish)
 		start_time1 = pygame.time.get_ticks()
 		start_time2 = pygame.time.get_ticks()
 
@@ -293,15 +289,13 @@ while running:
 		show_game_over_screenp1()
 		screen.blit(background,(0,0))
 		game_over1 = False
-		
 		all_sprites = pygame.sprite.Group()
-		
+		borde = Borde()
 		enemy = Enemy()
 		player1 = Player1()
 		player2 = Player2()
-		borde = Borde()
 		finish = Finish()
-		all_sprites.add(enemy ,player1, player2, borde, finish)
+		all_sprites.add(borde, enemy ,player1, player2, finish)
 		start_time1 = pygame.time.get_ticks()
 		start_time2 = pygame.time.get_ticks()
 
@@ -309,15 +303,13 @@ while running:
 		show_game_over_screenp2()
 		screen.blit(background,(0,0))
 		game_over2 = False
-		
 		all_sprites = pygame.sprite.Group()
-		
+		borde = Borde()
 		enemy = Enemy()
 		player1 = Player1()
 		player2 = Player2()
-		borde = Borde()
 		finish = Finish()
-		all_sprites.add(enemy ,player1, player2, borde, finish)	
+		all_sprites.add(borde, enemy ,player1, player2, finish)	
 		start_time1 = pygame.time.get_ticks()
 		start_time2 = pygame.time.get_ticks()
 	
@@ -380,18 +372,15 @@ while running:
 			sys.exit()
 			break	
 		
-		if player1.hp == 0:
-			player1.rect.centerx = 50
-			player1.rect.centery = HEIGHT //5
-			player1.hp = 100
-		if player2.hp == 0:
-			player2.rect.centerx = 50
-			player2.rect.centery = HEIGHT //4
-			player2.hp = 100
-		if player1.rect.centerx > WIDTH:
-			game_over = True
-		if player2.rect.centerx > WIDTH:
-			game_over = True
+	if player1.hp == 0:
+		player1.rect.centerx = 50
+		player1.rect.centery = HEIGHT //5
+		player1.hp = 100
+	if player2.hp == 0:
+		player2.rect.centerx = 50
+		player2.rect.centery = HEIGHT //4
+		player2.hp = 100
+		
 
 	# Checar colisiones - jugador1 - borde
 	if pygame.sprite.collide_rect(player1, borde):
