@@ -184,6 +184,7 @@ class Rupture(pygame.sprite.Sprite):
 		self.frame = 0
 		self.last_update = pygame.time.get_ticks()
 		self.frame_rate = 50 # VELOCIDAD DE LA animación
+		self.counter = True
 
 	def update(self):
 		now = pygame.time.get_ticks()
@@ -198,8 +199,11 @@ class Rupture(pygame.sprite.Sprite):
 				self.rect = self.image.get_rect()
 				self.rect.center = center
 		if self.frame == 1:
-			rupture_sound.play()
+			if self.counter:
+				rupture_sound.play()
+				self.counter = False
 		if self.frame == 12:
+			self.counter = True
 			enemy.blood = True
 
 def show_go_screen():

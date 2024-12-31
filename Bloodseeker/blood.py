@@ -29,7 +29,6 @@ def draw_text2(surface, text, size, x, y):
 	text_rect.midtop = (x, y)
 	surface.blit(text_surface, text_rect)
 
-
 def draw_hp_bar(surface, x, y, percentage):
 	BAR_LENGHT = 100
 	BAR_HEIGHT = 10
@@ -184,6 +183,7 @@ class Rupture(pygame.sprite.Sprite):
 		self.frame = 0
 		self.last_update = pygame.time.get_ticks()
 		self.frame_rate = 50 # VELOCIDAD DE LA animación
+		self.counter = True
 
 	def update(self):
 		now = pygame.time.get_ticks()
@@ -198,8 +198,11 @@ class Rupture(pygame.sprite.Sprite):
 				self.rect = self.image.get_rect()
 				self.rect.center = center
 		if self.frame == 1:
-			rupture_sound.play()
+			if self.counter:
+				rupture_sound.play()
+				self.counter = False
 		if self.frame == 12:
+			self.counter = True
 			enemy.blood = True
 				
 def show_go_screen():
@@ -386,14 +389,14 @@ while running:
 	if pygame.sprite.collide_rect(player1, borde):
 		if player1.speed_y > 0:
 			player1.rect.bottom = borde.rect.top
-		if player1.speed_y < 0:
+		elif player1.speed_y < 0:
 			player1.rect.top = borde.rect.bottom
 			
 	# Checar colisiones - jugador2 - borde
 	if pygame.sprite.collide_rect(player2, borde):
 		if player2.speed_y > 0:
 			player2.rect.bottom = borde.rect.top
-		if player2.speed_y < 0:
+		elif player2.speed_y < 0:
 			player2.rect.top = borde.rect.bottom
 
 	# Checar colisiones - jugador1 - finish
